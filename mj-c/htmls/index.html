@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>딥페이크 탐지를 위한 AI 모델 연구</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for better typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c52a0; /* Deeper blue */
+            --secondary-color: #3b82f6; /* Lighter blue */
+            --text-color-dark: #1f2937;
+            --text-color-light: #4b5563;
+            --bg-light: #f9fafb;
+            --bg-dark: #e5e7eb;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', 'Poppins', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-color-dark);
+            line-height: 1.7;
+        }
+
+        /* Custom scrollbar for better aesthetics */
+        body::-webkit-scrollbar {
+            width: 8px;
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: var(--secondary-color);
+            border-radius: 4px;
+        }
+
+        /* Section heading animation */
+        .animated-heading::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 4px;
+            background-color: var(--secondary-color);
+            transition: width 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .animated-heading:hover::after,
+        .animated-heading.active::after {
+            width: 60px; /* or 100% of the heading */
+        }
+
+        /* Card hover effect */
+        .card {
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-10">
+    <div class="container mx-auto bg-white shadow-2xl rounded-3xl overflow-hidden">
+        <!-- Hero Section with a modern, darker gradient -->
+        <header class="relative bg-gradient-to-br from-gray-900 to-gray-700 text-white p-8 sm:p-16 text-center rounded-t-3xl shadow-lg">
+            <h1 class="text-3xl sm:text-5xl font-bold mb-4 font-poppins animate-fade-in-down">
+                Deepfake Detection Research
+            </h1>
+            <p class="text-sm sm:text-base opacity-80 animate-fade-in-up">
+                딥페이크 탐지를 위한 인공지능 모델 연구 계획서
+            </p>
+            <!-- A subtle, animated background element -->
+            <div class="absolute inset-0 w-full h-full opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%239CA3AF\' fill-opacity=\'0.2\'%3E%3Cpath d=\'M36 34.225V42h-6v-8.113L30 34c0-2.21 1.79-4 4-4s4 1.79 4 4zM18 16V8h-6v8.113L18 16c0-2.21 1.79-4 4-4s4 1.79 4 4zM36 42.225V50h-6v-8.113L30 42c0-2.21 1.79-4 4-4s4 1.79 4 4zM18 24V16h-6v8.113L18 24c0-2.21 1.79-4 4-4s4 1.79 4 4z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E'); background-size: 60px; background-repeat: repeat; animation: move-bg 30s linear infinite;"></div>
+        </header>
+
+        <!-- Main content area -->
+        <main class="p-6 sm:p-12 space-y-12">
+            <!-- 2. 서론 Section -->
+            <section class="card bg-gray-50 p-6 sm:p-8 rounded-2xl shadow-md">
+                <h2 class="animated-heading text-2xl sm:text-3xl font-bold mb-6 font-poppins">Introduction</h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="col-span-1">
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">연구 동기 및 필요성</h3>
+                        <p class="text-gray-600 text-sm">
+                            딥페이크 기술의 악용 사례를 방지하기 위해, 디지털 콘텐츠의 신뢰성을 확보할 수 있는 탐지 기술의 필요성에 주목했습니다.
+                        </p>
+                    </div>
+                    <div class="col-span-1">
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">연구 목적</h3>
+                        <p class="text-gray-600 text-sm">
+                            딥페이크의 미세한 특징을 학습하여 실제 영상과 구별하는 인공지능 기반 탐지 모델을 개발하고, 딥페이크 확산을 방지하는 것이 목표입니다.
+                        </p>
+                    </div>
+                    <div class="col-span-1">
+                        <h3 class="font-bold text-lg text-gray-800 mb-2">연구 문제</h3>
+                        <ul class="list-disc pl-5 text-gray-600 text-sm">
+                            <li>가장 효과적인 딥페이크 탐지 특징은 무엇인가?</li>
+                            <li>모델의 정확도는 얼마나 높은가?</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. 이론적 배경 Section -->
+            <section class="card bg-gray-50 p-6 sm:p-8 rounded-2xl shadow-md">
+                <h2 class="animated-heading text-2xl sm:text-3xl font-bold mb-6 font-poppins">Theoretical Background</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800 mb-2">관련 이론 및 기술</h3>
+                        <div class="grid sm:grid-cols-3 gap-4">
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="font-semibold text-primary-color">딥러닝</p>
+                                <p class="text-xs text-gray-500">인간 뇌 신경망을 모방하여 데이터를 학습하는 AI 기술</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="font-semibold text-primary-color">합성곱 신경망 (CNN)</p>
+                                <p class="text-xs text-gray-500">이미지 데이터 처리에 특화된 딥러닝 모델</p>
+                            </div>
+                            <div class="bg-white p-4 rounded-lg shadow-sm">
+                                <p class="font-semibold text-primary-color">데이터셋</p>
+                                <p class="text-xs text-gray-500">AI 모델 학습에 필수적인 데이터 집합</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800 mb-2">선행 연구 키워드</h3>
+                        <ul class="flex flex-wrap gap-2 text-sm text-gray-600">
+                            <li class="bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300 cursor-pointer transition">#딥페이크탐지기술</li>
+                            <li class="bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300 cursor-pointer transition">#딥페이크데이터셋</li>
+                            <li class="bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300 cursor-pointer transition">#얼굴감정인식</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. 연구 내용 및 방법 Section -->
+            <section class="card bg-gray-50 p-6 sm:p-8 rounded-2xl shadow-md">
+                <h2 class="animated-heading text-2xl sm:text-3xl font-bold mb-6 font-poppins">Methodology</h2>
+                <div class="space-y-6">
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800 mb-2">연구 대상 및 범위</h3>
+                        <p class="text-gray-600 text-sm">
+                            공개된 **DFDC 데이터셋**과 실제 영상을 활용하며, 영상 속 얼굴 움직임과 노이즈를 중심으로 모델을 개발합니다.
+                        </p>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800 mb-2">연구 절차 및 방법</h3>
+                        <ol class="list-none space-y-4 text-gray-600">
+                            <li class="relative pl-6">
+                                <span class="absolute left-0 top-0 w-5 h-5 flex items-center justify-center text-white bg-secondary-color rounded-full">1</span>
+                                <strong>데이터 수집 및 전처리:</strong> 모델 학습에 적합하도록 영상 데이터를 가공합니다.
+                            </li>
+                            <li class="relative pl-6">
+                                <span class="absolute left-0 top-0 w-5 h-5 flex items-center justify-center text-white bg-secondary-color rounded-full">2</span>
+                                <strong>모델 설계 및 구현:</strong> Python, TensorFlow/PyTorch를 사용해 CNN 기반 모델을 코딩합니다.
+                            </li>
+                            <li class="relative pl-6">
+                                <span class="absolute left-0 top-0 w-5 h-5 flex items-center justify-center text-white bg-secondary-color rounded-full">3</span>
+                                <strong>모델 학습 및 평가:</strong> 데이터를 기반으로 모델을 학습시키고, 정확도 등의 지표로 성능을 평가합니다.
+                            </li>
+                            <li class="relative pl-6">
+                                <span class="absolute left-0 top-0 w-5 h-5 flex items-center justify-center text-white bg-secondary-color rounded-full">4</span>
+                                <strong>결과 분석 및 보고서 작성:</strong> 최종 분석 결과로 연구 보고서와 발표 자료를 준비합니다.
+                            </li>
+                        </ol>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-xl text-gray-800 mb-2">예상 주요 활동 일정</h3>
+                        <ul class="list-none space-y-2 text-gray-600 text-sm">
+                            <li class="p-2 bg-gray-200 rounded-md"><strong>1주차:</strong> 계획 구체화, 선행 연구 조사</li>
+                            <li class="p-2 bg-gray-200 rounded-md"><strong>2-3주차:</strong> 데이터 수집 및 전처리</li>
+                            <li class="p-2 bg-gray-200 rounded-md"><strong>4-5주차:</strong> 모델 설계 및 구현</li>
+                            <li class="p-2 bg-gray-200 rounded-md"><strong>6-7주차:</strong> 모델 학습 및 평가</li>
+                            <li class="p-2 bg-gray-200 rounded-md"><strong>8주차:</strong> 보고서 작성 및 발표 준비</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. 기대 효과 및 활용 방안 Section -->
+            <section class="card bg-gray-50 p-6 sm:p-8 rounded-2xl shadow-md">
+                <h2 class="animated-heading text-2xl sm:text-3xl font-bold mb-6 font-poppins">Expected Outcomes</h2>
+                <div class="grid sm:grid-cols-3 gap-6">
+                    <div class="bg-white p-5 rounded-xl shadow-md">
+                        <h4 class="font-bold text-primary-color mb-1">사회적 측면</h4>
+                        <p class="text-xs text-gray-500">허위 정보 확산을 방지하고, 영상 콘텐츠의 신뢰도를 높입니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-md">
+                        <h4 class="font-bold text-primary-color mb-1">학문적 측면</h4>
+                        <p class="text-xs text-gray-500">딥페이크 탐지 분야에 대한 새로운 연구 방향을 제시합니다.</p>
+                    </div>
+                    <div class="bg-white p-5 rounded-xl shadow-md">
+                        <h4 class="font-bold text-primary-color mb-1">개인적 측면</h4>
+                        <p class="text-xs text-gray-500">AI 모델 개발 경험을 통해 딥러닝 기술 이해도를 높입니다.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. 참고 문헌 Section -->
+            <section class="card bg-gray-50 p-6 sm:p-8 rounded-2xl shadow-md">
+                <h2 class="animated-heading text-2xl sm:text-3xl font-bold mb-6 font-poppins">References</h2>
+                <ul class="list-decimal pl-6 text-gray-600 text-sm">
+                    <li>Lee, M. J., Kim, S. H., & Park, H. W. (2023). **딥러닝 기반 딥페이크 영상 탐지 기술의 현황과 발전 방향.** _한국정보과학회 논문지_, 45(2), 112-120.</li>
+                    <li>Choi, Y. K., & Jung, W. S. (2022). **딥페이크 기술의 특징 분석 및 탐지 기법 연구.** _정보과학 연구_, 20(4), 55-68.</li>
+                </ul>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white text-center p-6 rounded-b-3xl">
+            <p class="text-sm opacity-75">© 2025. 이 연구 계획서는 정보과학과제연구 보고서 작성을 위해 제작되었습니다.</p>
+        </footer>
+    </div>
+</body>
+</html>
