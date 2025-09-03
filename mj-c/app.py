@@ -6,8 +6,9 @@ import os
 st.set_page_config(layout="wide")
 
 # HTML 파일의 경로를 'htmls' 폴더 내 'index.html'로 설정합니다.
-# os.path.join을 사용하여 운영체제에 관계없이 올바른 경로를 만듭니다.
-html_file_path = os.path.join("htmls", "index.html")
+# os.path.dirname(__file__)를 사용하여 현재 스크립트 파일의 디렉터리 경로를 가져옵니다.
+script_dir = os.path.dirname(__file__)
+html_file_path = os.path.join(script_dir, "htmls", "index.html")
 
 # 지정된 경로에 HTML 파일이 존재하는지 확인합니다.
 if not os.path.exists(html_file_path):
@@ -25,4 +26,3 @@ else:
     except Exception as e:
         # 파일을 읽는 도중 오류가 발생하면 사용자에게 알립니다.
         st.error(f"오류: HTML 파일을 읽는 중 문제가 발생했습니다: {e}")
-
