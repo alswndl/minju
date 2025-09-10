@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>학생 조 편성기</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-8">
+    <div class="container mx-auto max-w-4xl bg-white p-8 rounded-2xl shadow-xl">
+        <h1 class="text-3xl font-bold text-center text-gray-800 mb-6">학생 조 편성기</h1>
+        <p class="text-center text-gray-600 mb-8">
+            학생의 성적을 입력하고 조 편성 버튼을 눌러보세요.
+            <br>
+            문과(국어, 영어, 수학, 사탐)와 이과(국어, 영어, 수학, 과탐)를 따로 편성합니다.
+        </p>
+
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">학생 정보 입력</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">이름</label>
+                    <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">계열</label>
+                    <select id="field" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <option value="liberal">문과</option>
+                        <option value="science">이과</option>
+                    </option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">국어</label>
+                    <input type="number" id="korean" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">영어</label>
+                    <input type="number" id="english" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">수학</label>
+                    <input type="number" id="math" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">사탐/과탐</label>
+                    <input type="number" id="inquiry" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+            <button onclick="addStudent()" class="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">학생 추가</button>
+        </div>
+
+        <div class="mb-8 p-6 bg-gray-50 rounded-lg">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">학생 목록</h2>
+            <div id="studentList" class="space-y-2"></div>
+        </div>
+        
+        <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 md:space-x-4 mb-8 p-6 bg-gray-50 rounded-lg">
+            <div class="w-full md:w-auto">
+                <label class="block text-sm font-medium text-gray-700 mb-1">한 조당 인원</label>
+                <input type="number" id="groupSize" value="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            <button onclick="organizeTeams()" class="w-full md:w-auto bg-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-green-600 transition-colors">
+                <span class="text-lg font-bold">조 편성하기</span>
+            </button>
+        </div>
+
+        <div>
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">조 편성 결과</h2>
+            <div id="results" class="space-y-6"></div>
+        </div>
+
+        <!-- Custom Modal for Alerts -->
+        <div id="custom-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center p-4" onclick="closeModal()">
+            <div class="bg-white p-6 rounded-xl shadow-2xl max-w-sm w-full" onclick="event.stopPropagation()">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">알림</h3>
+                <p id="modal-message" class="text-gray-600 mb-6"></p>
+                <div class="flex justify-end">
+                    <button onclick="closeModal()" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">확인</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script type="text/javascript">
+        let students = [];
+        let groupHistory = []; // 과거 조 편성 기록
+
+        const studentListEl = document.getElementById('studentList');
+        const resultsEl = document.getElementById('results');
+        const modalEl = document.getElementById('custom-modal');
+        const modalMessageEl = document.getElementById('modal-message');
+
+        // 커스텀 모달 열기
+        function openModal(message) {
+            modalMessageEl.innerText = message;
+            modalEl.classList.remove('hidden');
+            modalEl.classList.add('flex');
+        }
+
+        // 커스텀 모달 닫기
+        function closeModal() {
+            modalEl.classList.add('hidden');
+            modalEl.classList.remove('flex');
+        }
+
+        function addStudent() {
+            const name = document.getElementById('name').value;
+            const field = document.getElementById('field').value;
+            const korean = parseInt(document.getElementById('korean').value);
+            const english = parseInt(document.getElementById('english').value);
+            const math = parseInt(document.getElementById('math').value);
+            const inquiry = parseInt(document.getElementById('inquiry').value);
+
+            if (!name || isNaN(korean) || isNaN(english) || isNaN(math) || isNaN(inquiry)) {
+                openModal('모든 정보를 올바르게 입력해주세요.');
+                return;
+            }
+
+            students.push({
+                id: students.length,
+                name,
+                field,
+                scores: { korean, english, math, inquiry }
+            });
+
+            clearInputs();
+            renderStudentList();
+        }
+
+        function renderStudentList() {
+            studentListEl.innerHTML = '';
+            students.forEach(student => {
+                const studentEl = document.createElement('div');
+                studentEl.className = 'flex justify-between items-center p-3 bg-white rounded-lg shadow-sm';
+                studentEl.innerHTML = `
+                    <span class="text-gray-800">${student.name} (${student.field === 'liberal' ? '문과' : '이과'})</span>
+                    <button onclick="removeStudent(${student.id})" class="text-red-500 hover:text-red-700 transition-colors">삭제</button>
+                `;
+                studentListEl.appendChild(studentEl);
+            });
+        }
+
+        function removeStudent(id) {
+            students = students.filter(student => student.id !== id);
+            renderStudentList();
+        }
+
+        function clearInputs() {
+            document.getElementById('name').value = '';
+            document.getElementById('korean').value = '';
+            document.getElementById('english').value = '';
+            document.getElementById('math').value = '';
+            document.getElementById('inquiry').value = '';
+        }
+
+        function organizeTeams() {
+            // 이 함수는 학생 성적을 기반으로 조를 편성하는 시뮬레이션 역할을 합니다.
+            const groupSize = parseInt(document.getElementById('groupSize').value);
+            if (groupSize < 2 || students.length < groupSize) {
+                openModal(`한 조당 인원은 최소 2명 이상이어야 하며, 전체 학생 수보다 적어야 합니다.`);
+                return;
+            }
+
+            resultsEl.innerHTML = '';
+            
+            // 문과와 이과 학생 분리
+            const liberalStudents = students.filter(s => s.field === 'liberal');
+            const scienceStudents = students.filter(s => s.field === 'science');
+
+            const liberalGroups = createGroups(liberalStudents, groupSize);
+            const scienceGroups = createGroups(scienceStudents, groupSize);
+
+            renderResults(liberalGroups, '문과');
+            renderResults(scienceGroups, '이과');
+
+            // 조 편성 기록
+            groupHistory.push({
+                liberalGroups: liberalGroups.map(group => group.map(s => s.id)),
+                scienceGroups: scienceGroups.map(group => group.map(s => s.id))
+            });
+            
+            // 너무 많은 기록이 쌓이지 않도록 관리
+            if (groupHistory.length > 10) {
+                groupHistory.shift();
+            }
+        }
+        
+        function createGroups(studentPool, groupSize) {
+            // 학생 수가 0이거나 조 편성 인원보다 적으면 빈 배열 반환
+            if (studentPool.length === 0 || studentPool.length < groupSize) {
+                return [];
+            }
+        
+            // 학생을 성적 총합에 따라 정렬 (내림차순)
+            studentPool.forEach(s => {
+                s.totalScore = s.scores.korean + s.scores.english + s.scores.math + s.scores.inquiry;
+            });
+            studentPool.sort((a, b) => b.totalScore - a.totalScore);
+        
+            const numGroups = Math.floor(studentPool.length / groupSize);
+            let groups = Array.from({ length: numGroups }, () => []);
+        
+            // 성적이 고르게 분포되도록 지그재그 방식으로 배정
+            let studentIndex = 0;
+            for (let i = 0; i < studentPool.length; i++) {
+                const groupIndex = i % numGroups;
+                groups[groupIndex].push(studentPool[i]);
+            }
+        
+            let maxAttempts = 100; // 최대 시도 횟수
+            let isUnique = false;
+        
+            while (maxAttempts > 0 && !isUnique) {
+                // 조 내 학생들을 랜덤하게 섞기
+                groups.forEach(group => {
+                    shuffleArray(group);
+                });
+        
+                // 현재 편성된 조가 과거 기록에 있는지 확인
+                isUnique = true;
+                const currentGroups = groups.map(group => group.map(s => s.id).sort().join(','));
+                
+                for (const history of groupHistory) {
+                    const historicalGroups = history[studentPool[0].field === 'liberal' ? 'liberalGroups' : 'scienceGroups'].map(g => g.sort().join(','));
+                    
+                    const isSameHistory = currentGroups.every(group => historicalGroups.includes(group));
+                    if (isSameHistory) {
+                        isUnique = false;
+                        break;
+                    }
+                }
+        
+                if (!isUnique) {
+                    // 유니크하지 않으면 다시 섞기
+                    groups = Array.from({ length: numGroups }, () => []);
+                    studentPool.sort((a, b) => b.totalScore - a.totalScore);
+                    let studentIndex = 0;
+                    for (let i = 0; i < studentPool.length; i++) {
+                        const groupIndex = i % numGroups;
+                        groups[groupIndex].push(studentPool[i]);
+                    }
+                }
+                maxAttempts--;
+            }
+        
+            return groups;
+        }
+        
+        // Fisher-Yates shuffle 알고리즘
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function renderResults(groups, fieldName) {
+            if (groups.length === 0) {
+                return;
+            }
+            
+            const fieldTitleEl = document.createElement('h3');
+            fieldTitleEl.className = 'text-xl font-bold text-gray-800 mb-4 border-b pb-2';
+            fieldTitleEl.innerText = `${fieldName} 학생 조 편성 결과`;
+            resultsEl.appendChild(fieldTitleEl);
+
+            groups.forEach((group, index) => {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'p-4 bg-gray-50 rounded-lg shadow-sm';
+                groupEl.innerHTML = `
+                    <p class="text-lg font-semibold text-gray-700 mb-2">조 ${index + 1}</p>
+                    <ul class="list-disc list-inside space-y-1">
+                        ${group.map(student => `<li class="text-gray-600">${student.name} (총점: ${student.totalScore}, 국: ${student.scores.korean}, 영: ${student.scores.english}, 수: ${student.scores.math}, 탐: ${student.scores.inquiry})</li>`).join('')}
+                    </ul>
+                `;
+                resultsEl.appendChild(groupEl);
+            });
+        }
+    </script>
+</body>
+</html>
