@@ -9,7 +9,7 @@ st.set_page_config(layout="wide")
 st.sidebar.title("HTML 파일 선택")
 html_file_choice = st.sidebar.radio(
     "보고 싶은 파일을 선택하세요:",
-    ("index.html", "index2.html")
+    ("연구 계획서", "조 편성 프로그램")
 )
 
 # HTML 파일의 경로를 'htmls' 폴더 내 선택된 파일로 설정합니다.
@@ -31,3 +31,4 @@ else:
     except Exception as e:
         # 파일을 읽는 도중 오류가 발생하면 사용자에게 알립니다.
         st.error(f"오류: HTML 파일을 읽는 중 문제가 발생했습니다: {e}")
+
