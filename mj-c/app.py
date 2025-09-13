@@ -14,8 +14,8 @@ html_file_choice = st.sidebar.radio(
 
 # 파일 이름을 선택에 따라 결정합니다.
 file_map = {
-    "연구 계획서": "연구 계획서",
-    "조 편성 프로그램": "조 편성 프로그램",
+    "연구 계획서": "index.html",
+    "조 편성 프로그램": "index2.html",
     "숫자 보드게임": "index3.html"
 }
 html_file_name = file_map.get(html_file_choice)
@@ -39,4 +39,5 @@ else:
     except Exception as e:
         # 파일을 읽는 도중 오류가 발생하면 사용자에게 알립니다.
         st.error(f"오류: HTML 파일을 읽는 중 문제가 발생했습니다: {e}")
+
 
