@@ -9,16 +9,24 @@ st.set_page_config(layout="wide")
 st.sidebar.title("정보과학과제연구")
 html_file_choice = st.sidebar.radio(
     "이동할 페이지를 선택하세요:",
-    ("연구 계획서", "조 편성 프로그램")
+    ("연구 계획서", "조 편성 프로그램", "세 번째 페이지")
 )
+
+# 파일 이름을 선택에 따라 결정합니다.
+file_map = {
+    "연구 계획서": "연구 계획서.html",
+    "조 편성 프로그램": "조 편성 프로그램.html",
+    "세 번째 페이지": "index3.html"
+}
+html_file_name = file_map.get(html_file_choice)
 
 # HTML 파일의 경로를 'htmls' 폴더 내 선택된 파일로 설정합니다.
 script_dir = os.path.dirname(__file__)
-html_file_path = os.path.join(script_dir, "htmls", html_file_choice)
+html_file_path = os.path.join(script_dir, "htmls", html_file_name)
 
 # 지정된 경로에 HTML 파일이 존재하는지 확인합니다.
 if not os.path.exists(html_file_path):
-    st.error(f"오류: HTML 파일 '{html_file_path}'을(를) 찾을 수 없습니다. 'htmls' 폴더 내에 '{html_file_choice}' 파일이 있는지 확인해주세요.")
+    st.error(f"오류: HTML 파일 '{html_file_path}'을(를) 찾을 수 없습니다. 'htmls' 폴더 내에 '{html_file_name}' 파일이 있는지 확인해주세요.")
 else:
     # 파일이 존재하면 내용을 읽어와서 변수에 저장합니다.
     try:
@@ -31,5 +39,3 @@ else:
     except Exception as e:
         # 파일을 읽는 도중 오류가 발생하면 사용자에게 알립니다.
         st.error(f"오류: HTML 파일을 읽는 중 문제가 발생했습니다: {e}")
-
-
